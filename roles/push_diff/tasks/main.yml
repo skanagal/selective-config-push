@@ -1,0 +1,25 @@
+
+- name: Run a diff
+  arista.eos.eos_config:
+    diff_against: intended
+    intended_config: "{{ lookup('file', 'templates/config_template.cfg') }}"
+    diff_ignore_lines: ['username*']
+  register: X1
+  diff: yes
+  notify: 'push_config'
+
+- debug: var=X1
+
+- name: Gather only the config and default facts
+  arista.eos.eos_facts:
+    gather_subset:
+    - config
+  register: facts
+- debug: var=facts
+
+- name: extract diff config
+  set_fact:
+    X2: "{{ X2 + [item] }}"
+  with_items: "{{facts['ansible_facts']['ansible_net_config'].split('\n')}}"
+  when: "item.startswith('username')"
+  notify: 'push_config'

@@ -1,0 +1,12 @@
+- name: Run a diff
+  arista.eos.eos_config:
+    # src: templates/pe1_config.cfg
+    diff_against: intended
+    # diff_ignore_lines: 'vlan *'
+    intended_config: "{{ lookup('file', 'templates/config_template.cfg') }}"
+    #'username *'
+  register: myoutput
+  # diff_ignore_lines: [vlan*]
+
+  check_mode: yes
+  notify: 'push_selective_config'

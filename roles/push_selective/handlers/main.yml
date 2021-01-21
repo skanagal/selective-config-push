@@ -1,0 +1,9 @@
+- name: Push Config
+  arista.eos.eos_config:
+    src: templates/config_template.cfg
+  check_mode: no
+  listen: 'push_selective_config'
+- name: Print Configuration Pushed
+  debug:
+    msg: "{{myoutput['updates'] | to_nice_yaml}}"
+  listen: 'push_selective_config'

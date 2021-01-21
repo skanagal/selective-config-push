@@ -1,0 +1,10 @@
+- name: create temporary file with T1-M1+M2
+  template:
+    dest: templates/temp.cfg
+    src: templates/temp.j2
+  listen: 'push_config'
+- name: eos_config
+  eos_config:
+    src: templates/temp.cfg
+    replace: config
+  listen: 'push_config'
